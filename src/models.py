@@ -10,7 +10,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.svm import SVR
-from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+from sklearn.ensemble import RandomForestRegressor
 
 try:
     import xgboost as xgb
@@ -26,9 +26,6 @@ RANDOM_STATE = 42
 # sees the same fixed subset.  This is a known limitation of the screening
 # phase; the full training set is used for final GridSearchCV tuning.
 N_SVR_SCREEN = 20_000
-
-# Number of quantile bins used for stratified train/test splitting
-N_STRATIFY_BINS = 10
 
 # Number of top models / datasets selected for hyperparameter tuning
 N_TOP_MODELS = 2
@@ -79,12 +76,13 @@ def build_pipeline(model_name: str, use_pca: bool = False) -> Pipeline:
         steps.append(('model', RandomForestRegressor(
             random_state=RANDOM_STATE, n_jobs=-1)))
     elif model_name == 'XGB':
-        if XGBOOST_AVAILABLE:
-            steps.append(('model', xgb.XGBRegressor(
-                random_state=RANDOM_STATE, n_jobs=-1, verbosity=0)))
-        else:
-            steps.append(('model', GradientBoostingRegressor(
-                random_state=RANDOM_STATE)))
+        if not XGBOOST_AVAILABLE:
+            raise ImportError(
+                "model_name='XGB' requires the optional 'xgboost' package. "
+                "Install it with `pip install xgboost` or select a different model_name."
+            )
+        steps.append(('model', xgb.XGBRegressor(
+            random_state=RANDOM_STATE, n_jobs=-1, verbosity=0)))
     else:
         raise ValueError(f'Unknown model name: {model_name!r}')
 
