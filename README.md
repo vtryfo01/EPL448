@@ -5,7 +5,7 @@ Machine learning project for predicting the invariant mass of dielectron collisi
 **Team 2**
 
 - Varnavas Tryfonos
-- Thrasos Sazeidis
+- Thrasos Sazeides
 - Andreas Evagorou
 
 ## Overview

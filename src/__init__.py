@@ -13,7 +13,7 @@ validation : validate_raw, validate_clean
 __version__ = "1.0.0"
 __authors__ = [
     "Varnavas Tryfonos",
-    "Thrasos Sazeidis",
+    "Thrasos Sazeides",
     "Andreas Evagorou",
 ]
 
