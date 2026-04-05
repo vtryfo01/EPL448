@@ -26,9 +26,9 @@ def validate_raw(df: pd.DataFrame) -> None:
     Checks
     ------
     1. All required columns are present (handles trailing-space column names).
-    2. The target M is strictly positive everywhere.
+    2. The target M is strictly positive wherever it is present.
     3. Log-transform features are strictly positive.
-    4. No NaN values in the target column.
+    4. Missing target values are tolerated at this stage and are cleaned later.
 
     Parameters
     ----------
@@ -50,15 +50,13 @@ def validate_raw(df: pd.DataFrame) -> None:
             f"Found columns: {sorted(df.columns.tolist())}"
         )
 
-    n_nan_m = df['M'].isna().sum()
-    if n_nan_m > 0:
-        raise ValueError(
-            f"Target column M contains {n_nan_m} NaN values."
-        )
+    m_non_null = df['M'].dropna()
+    if m_non_null.empty:
+        raise ValueError("Target column M has no valid values after excluding NaNs.")
 
-    if not (df['M'] > 0).all():
+    if not (m_non_null > 0).all():
         raise ValueError(
-            f"Target M has {(df['M'] <= 0).sum()} non-positive values. "
+            f"Target M has {(m_non_null <= 0).sum()} non-positive values. "
             "Invariant mass must be strictly positive."
         )
 

@@ -14,6 +14,9 @@ __pycache__/
 # ── Jupyter ───────────────────────────────────────────────────────────────────
 .ipynb_checkpoints/
 *.ipynb_checkpoints
+.jupyter-config/
+.jupyter-data/
+.jupyter-runtime/
 
 # ── Data files (use Git LFS or a download script instead) ────────────────────
 *.csv
@@ -27,8 +30,8 @@ outputs/
 *.png
 *.jpg
 *.jpeg
-*.pdf
 *.svg
+*.tex
 
 # ── Archives ──────────────────────────────────────────────────────────────────
 *.zip
@@ -47,3 +50,6 @@ Thumbs.db
 dist/
 build/
 *.egg-info/
+
+# ── Logs and temporary files ─────────────────────────────────────────────────
+.tmp/

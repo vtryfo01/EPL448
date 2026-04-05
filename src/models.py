@@ -19,6 +19,7 @@ except ImportError:
     XGBOOST_AVAILABLE = False
 
 RANDOM_STATE = 42
+N_JOBS = 1
 
 # SVR is O(n² … n³) in the number of samples.  For the screening phase we
 # subsample the training set to keep wall-clock time manageable.
@@ -69,12 +70,12 @@ def build_pipeline(model_name: str, use_pca: bool = False) -> Pipeline:
 
     # Model
     if model_name == 'KNN':
-        steps.append(('model', KNeighborsRegressor(n_jobs=-1)))
+        steps.append(('model', KNeighborsRegressor(n_jobs=N_JOBS)))
     elif model_name == 'SVR':
         steps.append(('model', SVR()))
     elif model_name == 'RF':
         steps.append(('model', RandomForestRegressor(
-            random_state=RANDOM_STATE, n_jobs=-1)))
+            random_state=RANDOM_STATE, n_jobs=N_JOBS)))
     elif model_name == 'XGB':
         if not XGBOOST_AVAILABLE:
             raise ImportError(
@@ -82,7 +83,7 @@ def build_pipeline(model_name: str, use_pca: bool = False) -> Pipeline:
                 "Install it with `pip install xgboost` or select a different model_name."
             )
         steps.append(('model', xgb.XGBRegressor(
-            random_state=RANDOM_STATE, n_jobs=-1, verbosity=0)))
+            random_state=RANDOM_STATE, n_jobs=N_JOBS, verbosity=0)))
     else:
         raise ValueError(f'Unknown model name: {model_name!r}')
 
